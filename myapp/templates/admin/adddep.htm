@@ -1,0 +1,292 @@
+{% extends 'admin/adminlayout.htm' %}
+
+{% block admin %}
+
+<style>
+    .department-page {
+        width: 100%;
+        color: #14275d;
+    }
+
+    .department-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #14275d;
+        margin: 0 0 5px;
+    }
+
+    .department-subtitle {
+        color: #66708c;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .department-card {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #d7e2ff;
+        border-radius: 20px;
+        padding: 27px 28px 28px;
+    }
+
+    .department-card-title {
+        color: #14275d;
+        font-size: 25px;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .department-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 27px;
+        margin-bottom: 25px;
+    }
+
+    .department-form-group {
+        width: 100%;
+    }
+
+    .department-form-group label {
+        display: block;
+        color: #14275d;
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 9px;
+    }
+
+    .department-input,
+    .department-select,
+    .department-textarea {
+        width: 100%;
+        border: 1px solid #cbd9ff;
+        background-color: #f8faff;
+        border-radius: 14px;
+        outline: none;
+        color: #222222;
+        font-family: "Rubik", sans-serif;
+        font-size: 17px;
+        transition: 0.3s ease;
+    }
+
+    .department-input,
+    .department-select {
+        height: 60px;
+        padding: 0 14px;
+    }
+
+    .department-textarea {
+        min-height: 130px;
+        padding: 14px;
+        resize: vertical;
+    }
+
+    .department-input:focus,
+    .department-select:focus,
+    .department-textarea:focus {
+        border-color: #2455d6;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(36, 85, 214, 0.08);
+    }
+
+    .description-group {
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    .department-buttons {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .save-department-btn {
+        border: none;
+        background-color: #1f4bc5;
+        color: #ffffff;
+        padding: 12px 19px;
+        border-radius: 11px;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: "Rubik", sans-serif;
+        cursor: pointer;
+    }
+
+    .save-department-btn:hover {
+        background-color: #173da8;
+    }
+
+    .department-back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e9efff;
+        color: #2455d6;
+        padding: 12px 15px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .department-back-btn:hover {
+        background-color: #dce6ff;
+        color: #1d49c5;
+    }
+
+    @media screen and (max-width: 900px) {
+        .department-form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .department-title {
+            font-size: 28px;
+        }
+    }
+</style>
+
+
+<div class="department-page">
+
+    <h1 class="department-title">
+        Add Department
+    </h1>
+
+    <p class="department-subtitle">
+        Create or update department details
+    </p>
+
+
+    <div class="department-card">
+
+        <h2 class="department-card-title">
+            Department Information
+        </h2>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- DEPARTMENT NAME AND CODE -->
+
+            <div class="department-form-row">
+
+                <div class="department-form-group">
+
+                    <label>Department Name</label>
+
+                    <input type="text" name="department_name" class="department-input">
+
+                </div>
+
+
+                <div class="department-form-group">
+
+                    <label>Department Code</label>
+
+                    <input type="text" name="department_code" class="department-input">
+
+                </div>
+
+            </div>
+
+
+            <!-- DEPARTMENT HEAD AND STATUS -->
+
+            <div class="department-form-row">
+
+                <div class="department-form-group">
+
+                    <label>Department Head</label>
+
+                    <input type="text" name="department_head" class="department-input">
+
+                </div>
+
+
+                <div class="department-form-group">
+
+                    <label>Status</label>
+
+                    <select name="status" class="department-select">
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL AND CONTACT NUMBER -->
+
+            <div class="department-form-row">
+
+                <div class="department-form-group">
+
+                    <label>Department Email</label>
+
+                    <input type="email" name="department_email" class="department-input">
+
+                </div>
+
+
+                <div class="department-form-group">
+
+                    <label>Contact Number</label>
+
+                    <input type="text" name="contact_number" class="department-input">
+
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="department-form-group description-group">
+
+                <label>Description</label>
+
+                <textarea name="description" class="department-textarea"></textarea>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="department-buttons">
+
+                <button type="submit" class="save-department-btn">
+
+                    <i class="bi bi-floppy-fill"></i>
+
+                    Save Department
+
+                </button>
+
+
+                <a href="javascript:history.back()" class="department-back-btn">
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

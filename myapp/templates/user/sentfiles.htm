@@ -1,0 +1,355 @@
+{% extends 'user/userlayout.htm' %}
+
+{% block user %}
+
+<style>
+    /* ===========================
+   PAGE HEADER
+=========================== */
+
+    .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .page-header h1 {
+        font-size: 32px;
+        font-weight: 800;
+        color: #0b3924;
+        margin-bottom: 6px;
+    }
+
+    .page-header p {
+        color: #5b6b62;
+        font-size: 15px;
+    }
+
+    .create-file-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #0b5f34;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 24px;
+        border-radius: 12px;
+        transition: 0.2s;
+    }
+
+    .create-file-btn:hover {
+        background: #084a28;
+        color: #ffffff;
+    }
+
+    /* ===========================
+   FILE LIST CARD
+=========================== */
+
+    .file-list-container {
+        width: 100%;
+    }
+
+    .file-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+    }
+
+    .file-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .file-table {
+        width: 100%;
+        min-width: 1100px;
+        border-collapse: collapse;
+    }
+
+    .file-table thead th {
+        background: #e7f5ec;
+        color: #078442;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        padding: 18px 20px;
+        text-align: left;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .file-table tbody td {
+        padding: 20px;
+        font-size: 15px;
+        color: #1a1a1a;
+        border-bottom: 1px solid #eef1ee;
+        vertical-align: middle;
+    }
+
+    .file-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .file-table tbody tr:hover td {
+        background: #fbfffc;
+    }
+
+    .subject-cell .sub-main {
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-bottom: 3px;
+    }
+
+    .subject-cell .sub-meta {
+        font-size: 13px;
+        color: #8a938c;
+    }
+
+    .no-file {
+        color: #9aa39b;
+    }
+
+    /* ===========================
+   STATUS BADGE
+=========================== */
+
+    .status-badge {
+        display: inline-block;
+        padding: 7px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .status-pending {
+        background: #fdecc8;
+        color: #a3720b;
+    }
+
+    .status-approved,
+    .status-completed {
+        background: #d9f2e1;
+        color: #0b7a3c;
+    }
+
+    .status-rejected {
+        background: #fbdcdf;
+        color: #c0293f;
+    }
+
+    /* ===========================
+   ACTION BUTTONS
+=========================== */
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    .action-buttons .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: 40px;
+        padding: 0 16px;
+        font-size: 14px;
+        font-weight: 700;
+        border-radius: 10px;
+        white-space: nowrap;
+        border: none !important;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-open {
+        background: #0b5f34 !important;
+        color: #ffffff !important;
+    }
+
+    .btn-open:hover {
+        background: #084a28 !important;
+        color: #ffffff !important;
+    }
+
+    /* Mobile */
+
+    @media (max-width:768px) {
+
+        .page-header {
+            flex-direction: column;
+        }
+
+        .create-file-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .file-table thead th,
+        .file-table tbody td {
+            padding: 14px 15px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .action-buttons .btn {
+            width: 100%;
+        }
+
+    }
+</style>
+
+
+<!-- HEADER -->
+
+<div class="page-header">
+
+    <div>
+        <h1>Sent Files</h1>
+        <p>Open file, track movement and take action</p>
+    </div>
+
+    <a href="{% url 'user_create_file' %}" class="create-file-btn">
+        Create File
+    </a>
+
+</div>
+
+
+<!-- FILE LIST -->
+
+<div class="file-list-container">
+
+    <div class="file-card">
+
+        <div class="file-table-wrapper">
+
+            <table class="file-table">
+
+                <thead>
+
+                    <tr>
+                        <th>File No</th>
+                        <th>Subject</th>
+                        <th>Attachment</th>
+                        <th>Created By</th>
+                        <th>Current User</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for data in filedata %}
+
+                    <tr>
+
+                        <!-- FILE NO -->
+
+                        <td>{{ data.file_no }}</td>
+
+
+                        <!-- SUBJECT + PRIORITY/DEPARTMENT -->
+
+                        <td class="subject-cell">
+                            <div class="sub-main">{{ data.subject }}</div>
+                            <div class="sub-meta">{{ data.priority }} | {{ data.departments }}</div>
+                        </td>
+
+
+                        <!-- ATTACHMENT -->
+
+                        <td>
+
+                            {% if data.file %}
+                            <a href="{{ data.file.url }}" target="_blank">View File</a>
+                            {% else %}
+                            <span class="no-file">No file</span>
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- CREATED BY -->
+
+                        <td>{{ data.create_user }}</td>
+
+
+                        <!-- CURRENT USER -->
+
+                        <td>{{ data.current_user }}</td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if data.status == 'Pending' %}
+                            <span class="status-badge status-pending">Pending</span>
+                            {% elif data.status == 'Approved' or data.status == 'Completed' %}
+                            <span class="status-badge status-approved">{{ data.status }}</span>
+                            {% elif data.status == 'Rejected' %}
+                            <span class="status-badge status-rejected">Rejected</span>
+                            {% else %}
+                            <span class="status-badge status-pending">{{ data.status }}</span>
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>{{ data.created_at|date:"d M Y" }}</td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+                            <div class="action-buttons">
+
+                                <a href="{% url 'details_file' data.id %}" class="btn btn-open">
+                                    Details
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="8" class="text-center">No Files Found</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

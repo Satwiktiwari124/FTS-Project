@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Admin Panel</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Rubik", sans-serif;
+            background-color: #f5f6fa;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* =========================
+           MAIN WRAPPER
+        ========================= */
+
+        .admin-wrapper {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 330px;
+            height: 100vh;
+
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            background-color: white;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            z-index: 1000;
+        }
+
+
+        /* =========================
+           SIDEBAR HEADER
+        ========================= */
+
+        .sidebar-header {
+            min-height: 272px;
+
+            background: linear-gradient(135deg,
+                    #2755d9,
+                    #19398f);
+
+            padding: 28px 24px;
+
+            color: white;
+        }
+
+
+        .logo-box {
+            width: 115px;
+            height: 125px;
+
+            background-color: white;
+
+            border-radius: 15px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 15px;
+
+            overflow: hidden;
+        }
+
+
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+
+        .sidebar-header h3 {
+            color: white;
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            margin: 0 0 4px 0;
+        }
+
+
+        .sidebar-header p {
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: 400;
+
+            margin: 0;
+        }
+
+
+        /* =========================
+           SIDEBAR MENU
+        ========================= */
+
+        .sidebar-menu {
+            padding: 30px 28px 50px;
+        }
+
+
+        .menu-title {
+            color: #8994b5;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            margin-top: 15px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .sidebar-menu a {
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            padding: 11px 5px;
+
+            margin-bottom: 4px;
+
+            color: #263e76;
+
+            font-size: 17px;
+
+            font-weight: 500;
+
+            border-radius: 8px;
+
+            transition: all 0.3s ease;
+        }
+
+
+        .sidebar-menu a i {
+            width: 25px;
+
+            color: #2455e6;
+
+            font-size: 20px;
+
+            text-align: center;
+        }
+
+
+        .sidebar-menu a:hover {
+            background-color: #edf2ff;
+
+            color: #2455e6;
+
+            padding-left: 12px;
+        }
+
+
+        /* =========================
+           SIDEBAR SCROLLBAR
+        ========================= */
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+
+        .sidebar::-webkit-scrollbar-track {
+            background-color: #eeeeee;
+        }
+
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #888888;
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           ADMIN CONTENT
+        ========================= */
+
+        .admin-content {
+            margin-left: 330px;
+
+            width: calc(100% - 330px);
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           TOP HEADER
+        ========================= */
+
+        .top-header {
+            width: 100%;
+
+            height: 92px;
+
+            background: linear-gradient(90deg,
+                    #2858dc,
+                    #19398f);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 38px;
+
+            color: white;
+
+            border-bottom: 3px solid #d8d8d8;
+        }
+
+
+        /* ADMIN PANEL TITLE */
+
+        .top-title {
+            color: white;
+
+            font-size: 30px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           ADMIN PROFILE
+        ========================= */
+
+        .admin-profile {
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+        }
+
+
+        .admin-info {
+            text-align: right;
+        }
+
+
+        .admin-info h5 {
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: 600;
+
+            margin: 0;
+        }
+
+
+        .admin-info p {
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 400;
+
+            margin: 5px 0 0 0;
+        }
+
+
+        /* PROFILE CIRCLE */
+
+        .profile-circle {
+            width: 52px;
+
+            height: 52px;
+
+            background-color: white;
+
+            color: #2455d6;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 18px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           PAGE CONTENT
+        ========================= */
+
+        .page-content {
+            width: 100%;
+
+            min-height: calc(100vh - 92px);
+
+            padding: 30px;
+
+            background-color: #f5f6fa;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media screen and (max-width: 768px) {
+
+            .sidebar {
+                width: 280px;
+            }
+
+
+            .admin-content {
+                margin-left: 280px;
+
+                width: calc(100% - 280px);
+            }
+
+
+            .top-header {
+                padding: 0 20px;
+            }
+
+
+            .top-title {
+                font-size: 24px;
+            }
+
+
+            .admin-info h5 {
+                font-size: 15px;
+            }
+
+
+            .admin-info p {
+                font-size: 14px;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="admin-wrapper">
+
+
+        <!-- ==================================
+             SIDEBAR
+        =================================== -->
+
+
+        <div class="sidebar">
+
+
+            <!-- SIDEBAR HEADER -->
+
+
+            <div class="sidebar-header">
+
+
+                <div class="logo-box">
+                    <img src="https://gglengage.com/images/ggllogo.png" alt="GGL Logo">
+                </div>
+
+                <h3>GGL Admin</h3>
+
+
+                <p>Administration Dashboard</p>
+
+
+            </div>
+
+
+
+            <!-- SIDEBAR MENU -->
+
+
+            <div class="sidebar-menu">
+
+
+                <!-- MAIN -->
+
+
+                <div class="menu-title">
+
+                    MAIN
+
+                </div>
+
+
+                <a href="{% url 'dashboard' %}">
+                    <i class="bi bi-speedometer2"></i>
+                    Admin Deskbord
+                </a>
+
+
+
+                <!-- FILE MANAGEMENT -->
+
+
+                <div class="menu-title">
+
+                    FILE MANAGEMENT
+
+                </div>
+
+
+                <a href="{% url 'admin_create_file' %}">
+                    <i class="bi bi-file-earmark-plus"></i>
+                    Create file
+                </a>
+
+                <a href="{% url 'ab_file_upload' %}">
+
+                    <i class="bi bi-inbox-fill"></i>
+
+                    recived file
+
+                </a>
+
+
+                <a href="{% url 'adminsentfiles' %}">
+                    <i class="bi bi-send-fill"></i>
+                    send file
+                </a>
+
+
+                <a href="{% url 'adminpendingfiles' %}">
+                    <i class="bi bi-clock-fill"></i>
+                    panding file
+                </a>
+
+
+                <a href="{% url 'filetrack' %}">
+
+                    <i class="bi bi-folder-fill"></i>
+
+                    file track
+
+                </a>
+
+
+
+
+
+
+                <!-- EMPLOYEE AND DEPARTMENT -->
+
+
+                <div class="menu-title">
+
+                    EMPLOYEE & DEPARTMENT
+
+                </div>
+
+
+                <a href="{% url 'addemployee' %}">
+                    <i class="bi bi-person-plus-fill"></i>
+                    Add Employee
+                </a>
+
+
+                <a href="{% url 'employeelist' %}" class="nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Manage Employee</span>
+                </a>
+
+
+                <a href="{% url 'adddep' %}">
+
+                    <i class="bi bi-buildings-fill"></i>
+
+
+                    Add Department
+                </a>
+                <a href="{% url 'depshow' %}" class="nav-link">
+                    <i class="bi bi-building"></i>
+                    <span>Manage Department</span>
+                </a>
+
+
+
+                <!-- ACCOUNT -->
+
+
+                <div class="menu-title">
+
+                    ACCOUNT
+
+                </div>
+
+
+                <a href="{% url 'logout' %}">
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                    Log out
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ==================================
+             ADMIN CONTENT
+        =================================== -->
+
+
+        <div class="admin-content">
+
+
+            <!-- TOP HEADER -->
+
+
+            <div class="top-header">
+
+
+                <!-- LEFT TITLE -->
+
+
+                <div class="top-title">
+
+                    Admin Panel
+
+                </div>
+
+
+
+                <!-- RIGHT ADMIN PROFILE -->
+
+
+                <div class="admin-profile">
+
+
+                    <div class="admin-info">
+
+
+                        <h5>
+
+                            GGL Head Office
+
+                        </h5>
+
+
+                        <p>
+
+                            Administrator
+
+                        </p>
+
+
+                    </div>
+
+
+
+                    <div class="profile-circle">
+
+                        G
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ==================================
+                 PAGE CONTENT
+            =================================== -->
+
+
+            <div class="page-content">
+
+
+                {% block admin %}
+
+
+                {% endblock %}
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+
+</html>

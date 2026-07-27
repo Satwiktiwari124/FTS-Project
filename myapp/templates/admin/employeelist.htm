@@ -1,0 +1,348 @@
+{% extends 'admin/adminlayout.htm' %}
+
+{% block admin %}
+
+<style>
+    .emp-page {
+        width: 100%;
+        color: #14275d;
+    }
+
+    .emp-page-title {
+        font-size: 34px;
+        font-weight: 700;
+        color: #14275d;
+        margin: 0 0 5px;
+    }
+
+    .emp-page-subtitle {
+        color: #66708c;
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+
+    .emp-card {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #d7e2ff;
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 8px 25px rgba(20, 39, 93, 0.06);
+    }
+
+    .emp-card-title {
+        color: #14275d;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 22px;
+    }
+
+    .emp-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .emp-table {
+        width: 100%;
+        min-width: 1200px;
+        border-collapse: collapse;
+    }
+
+    .emp-table thead th {
+        background: #e8edfd;
+        color: #2a4be0;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        padding: 16px 18px;
+        text-align: left;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .emp-table tbody td {
+        padding: 16px 18px;
+        border-bottom: 1px solid #edf0f8;
+        font-size: 15px;
+        color: #1c2a52;
+        vertical-align: middle;
+    }
+
+    .emp-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .emp-table tbody tr:hover {
+        background: #fafbff;
+    }
+
+    .emp-photo {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e8edfd;
+    }
+
+    .emp-photo-placeholder {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #e8edfd;
+        color: #2a4be0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .status-active {
+        display: inline-block;
+        padding: 5px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        background: #d9f2e1;
+        color: #0b7a3c;
+    }
+
+    .status-inactive {
+        display: inline-block;
+        padding: 5px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        background: #fbdcdf;
+        color: #c0293f;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    .btn-edit {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #eaf0ff;
+        color: #2a4be0;
+        padding: 8px 16px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .btn-edit:hover {
+        background: #dbe6ff;
+        color: #2a4be0;
+    }
+
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #fdecec;
+        color: #d64545;
+        padding: 8px 16px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .btn-delete:hover {
+        background: #fadada;
+        color: #d64545;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 40px;
+        color: #8892ab;
+    }
+
+    .add-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #1f3fc9;
+        color: #ffffff;
+        padding: 12px 22px;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        margin-bottom: 20px;
+    }
+
+    .add-btn:hover {
+        background: #172fa0;
+        color: #ffffff;
+    }
+
+    .header-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .header-row h1 {
+        font-size: 34px;
+        font-weight: 700;
+        color: #14275d;
+        margin: 0 0 5px;
+    }
+
+    @media (max-width: 768px) {
+
+        .emp-table thead th,
+        .emp-table tbody td {
+            padding: 12px 14px;
+        }
+
+        .action-btns {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="emp-page">
+
+    <div class="header-row">
+        <div>
+            <h1 class="emp-page-title">Employee List</h1>
+            <p class="emp-page-subtitle">Manage all registered employees</p>
+        </div>
+        <a href="{% url 'addemployee' %}" class="add-btn">
+            <i class="bi bi-person-plus-fill"></i>
+            Add Employee
+        </a>
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="emp-card">
+
+        <h2 class="emp-card-title">
+            <i class="bi bi-people-fill"></i>
+            All Employees ({{ employeedata|length }})
+        </h2>
+
+        <div class="emp-table-wrapper">
+
+            <table class="emp-table">
+
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Employee ID</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for emp in employeedata %}
+
+                    <tr>
+
+                        <!-- Photo -->
+                        <td>
+                            {% if emp.photo %}
+                            <img src="{{ emp.photo.url }}" class="emp-photo" alt="{{ emp.name }}">
+                            {% else %}
+                            <div class="emp-photo-placeholder">
+                                {{ emp.name|first|upper }}
+                            </div>
+                            {% endif %}
+                        </td>
+
+                        <!-- Name -->
+                        <td><strong>{{ emp.name }}</strong></td>
+
+                        <!-- Username -->
+                        <td>{{ emp.username }}</td>
+
+                        <!-- Email -->
+                        <td>{{ emp.email }}</td>
+
+                        <!-- Employee ID -->
+                        <td>{{ emp.empid }}</td>
+
+                        <!-- Department -->
+                        <td>{{ emp.department }}</td>
+
+                        <!-- Designation -->
+                        <td>{{ emp.designation }}</td>
+
+                        <!-- Role -->
+                        <td>{{ emp.role }}</td>
+
+                        <!-- Status -->
+                        <td>
+                            {% if emp.status == 'Active' %}
+                            <span class="status-active">Active</span>
+                            {% else %}
+                            <span class="status-inactive">Inactive</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Action -->
+                        <td>
+                            <div class="action-btns">
+                                <a href="{% url 'editemployee' emp.id %}" class="btn-edit">
+                                    <i class="bi bi-pencil-fill"></i>
+                                    Edit
+                                </a>
+                                <a href="{% url 'deleteemployee' emp.id %}" class="btn-delete"
+                                    onclick="return confirm('Are you sure you want to delete {{ emp.name }}?')">
+                                    <i class="bi bi-trash-fill"></i>
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="10" class="empty-message">
+                            <i class="bi bi-people-fill"
+                                style="font-size: 40px; display: block; margin-bottom: 15px; color: #c8d0e5;"></i>
+                            No Employees Found
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

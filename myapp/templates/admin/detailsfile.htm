@@ -1,0 +1,543 @@
+{% extends 'admin/adminlayout.htm' %}
+
+{% block admin %}
+
+<style>
+    .details-page {
+        width: 100%;
+    }
+
+    .details-layout {
+        display: grid;
+        grid-template-columns: 2.2fr 1fr;
+        gap: 25px;
+        align-items: start;
+    }
+
+    /* ===========================
+       SECTION HEADER BAR
+    =========================== */
+
+    .section-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .section-header {
+        background: linear-gradient(90deg, #2858dc, #19398f);
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: 700;
+        padding: 18px 24px;
+    }
+
+    .section-body {
+        padding: 0;
+    }
+
+    /* ===========================
+       DETAILS TABLE
+    =========================== */
+
+    .details-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .details-table tr {
+        border-bottom: 1px solid #eef1f8;
+    }
+
+    .details-table tr:last-child {
+        border-bottom: none;
+    }
+
+    .details-table th,
+    .details-table td {
+        padding: 16px 24px;
+        font-size: 15px;
+        vertical-align: middle;
+    }
+
+    .details-table th {
+        width: 220px;
+        text-align: left;
+        color: #14275d;
+        font-weight: 700;
+        background: #f8faff;
+    }
+
+    .details-table td {
+        color: #1c2a52;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        background: #fdecc8;
+        color: #a3720b;
+    }
+
+    .status-badge.status-approved,
+    .status-badge.status-completed {
+        background: #d9f2e1;
+        color: #0b7a3c;
+    }
+
+    .status-badge.status-rejected {
+        background: #fbdcdf;
+        color: #c0293f;
+    }
+
+    .no-file {
+        color: #9aa39b;
+        font-style: italic;
+    }
+
+    .view-file-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #2455d6;
+        color: #ffffff;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .view-file-btn:hover {
+        background: #173da8;
+        color: #ffffff;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: #e9efff;
+        color: #2455d6;
+        font-weight: 700;
+        font-size: 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        margin-bottom: 20px;
+    }
+
+    .back-link:hover {
+        background: #dce6ff;
+        color: #1d49c5;
+    }
+
+    /* ===========================
+       FILE ACTION SIDEBAR
+    =========================== */
+
+    .action-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        position: sticky;
+        top: 20px;
+    }
+
+    .action-body {
+        padding: 22px 22px 24px;
+    }
+
+    .move-form-group {
+        margin-bottom: 18px;
+    }
+
+    .move-form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #14275d;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .move-input,
+    .move-select,
+    .move-textarea {
+        width: 100%;
+        border: 1px solid #cbd9ff;
+        background: #f8faff;
+        border-radius: 10px;
+        outline: none;
+        color: #1a1a1a;
+        font-family: "Rubik", sans-serif;
+        font-size: 15px;
+        transition: 0.3s ease;
+    }
+
+    .move-input,
+    .move-select {
+        height: 48px;
+        padding: 0 14px;
+    }
+
+    .move-input[readonly] {
+        background: #eef1f8;
+        color: #66708c;
+    }
+
+    .move-textarea {
+        min-height: 100px;
+        padding: 12px 14px;
+        resize: vertical;
+    }
+
+    .move-input:focus,
+    .move-select:focus,
+    .move-textarea:focus {
+        border-color: #2455d6;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(36, 85, 214, 0.08);
+    }
+
+    .move-btn {
+        width: 100%;
+        border: none;
+        background-color: #1f4bc5;
+        color: #ffffff;
+        padding: 13px 20px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        font-family: "Rubik", sans-serif;
+        cursor: pointer;
+    }
+
+    .move-btn:hover {
+        background-color: #173da8;
+    }
+
+    /* ===========================
+       TRACK HISTORY TABLE
+    =========================== */
+
+    .history-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .history-table {
+        width: 100%;
+        min-width: 700px;
+        border-collapse: collapse;
+    }
+
+    .history-table thead th {
+        background-color: #e8edfd;
+        color: #2a4be0;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        padding: 16px 24px;
+        white-space: nowrap;
+    }
+
+    .history-table tbody td {
+        padding: 16px 24px;
+        border-bottom: 1px solid #edf0f8;
+        font-size: 15px;
+        color: #1c2a52;
+    }
+
+    .history-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .history-table tbody tr:hover {
+        background-color: #fafbff;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 30px;
+        color: #9aa3bf;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 992px) {
+        .details-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .action-card {
+            position: static;
+        }
+    }
+
+    @media (max-width: 600px) {
+
+        .details-table th,
+        .details-table td,
+        .history-table thead th,
+        .history-table tbody td {
+            padding: 12px 14px;
+        }
+
+        .details-table th {
+            width: 140px;
+        }
+    }
+</style>
+
+<div class="details-page">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+    <a href="javascript:history.back()" class="back-link">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+
+    <div class="details-layout">
+
+        <!-- LEFT COLUMN -->
+
+        <div>
+
+            <!-- FILE DETAILS -->
+
+            <div class="section-card">
+
+                <div class="section-header">
+                    File Details - {{ ab.file_no }}
+                </div>
+
+                <div class="section-body">
+
+                    <table class="details-table">
+
+                        <tr>
+                            <th>Subject</th>
+                            <td>{{ ab.subject }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Priority</th>
+                            <td>{{ ab.priority }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Created By</th>
+                            <td>{{ ab.create_user|default:"–" }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Current User</th>
+                            <td>{{ ab.current_user|default:"–" }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Description</th>
+                            <td>
+                                {% if ab.description %}
+                                {{ ab.description }}
+                                {% else %}
+                                <span class="no-file">No description provided</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Department</th>
+                            <td>{{ ab.departments|default:"–" }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Remarks</th>
+                            <td>
+                                {% if ab.remarks %}
+                                {{ ab.remarks }}
+                                {% else %}
+                                <span class="no-file">No remarks provided</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                {% if ab.status == 'Pending' %}
+                                <span class="status-badge">Pending</span>
+                                {% elif ab.status == 'Approved' or ab.status == 'Completed' %}
+                                <span class="status-badge status-approved">{{ ab.status }}</span>
+                                {% elif ab.status == 'Rejected' %}
+                                <span class="status-badge status-rejected">Rejected</span>
+                                {% else %}
+                                <span class="status-badge">{{ ab.status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Created Date</th>
+                            <td>{{ ab.created_at|date:"d M Y, h:i A" }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Attachment</th>
+                            <td>
+                                {% if ab.file %}
+                                <a href="{{ ab.file.url }}" target="_blank" class="view-file-btn">
+                                    <i class="bi bi-eye-fill"></i> View File
+                                </a>
+                                {% else %}
+                                <span class="no-file">No file attached</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- TRACK HISTORY -->
+
+            <div class="section-card">
+
+                <div class="section-header">
+                    Track History
+                </div>
+
+                <div class="section-body">
+
+                    <div class="history-table-wrapper">
+
+                        <table class="history-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Current User</th>
+                                    <th>Forwarded User</th>
+                                    <th>Action</th>
+                                    <th>Remark</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for h in track_history %}
+
+                                <tr>
+                                    <td>{{ h.from_user }}</td>
+                                    <td>{{ h.to_user }}</td>
+                                    <td>{{ h.action }}</td>
+                                    <td>
+                                        {% if h.remarks %}
+                                        {{ h.remarks }}
+                                        {% else %}
+                                        &ndash;
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ h.moved_at|date:"d M Y, h:i A" }}</td>
+                                </tr>
+
+                                {% empty %}
+
+                                <tr>
+                                    <td colspan="5" class="empty-message">
+                                        No Movement History Found
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: FILE ACTION -->
+
+        <div class="action-card">
+
+            <div class="section-header">
+                File Action
+            </div>
+
+            <div class="action-body">
+
+                <form method="POST" action="{% url 'admin_details_file' ab.id %}">
+
+                    {% csrf_token %}
+
+                    <div class="move-form-group">
+                        <label>Current User</label>
+                        <input type="text" class="move-input" value="{{ ab.current_user }}" name="current_user"
+                            readonly>
+                    </div>
+
+                    <div class="move-form-group">
+                        <label>Action</label>
+                        <select name="action" class="move-select" required>
+                            <option value="" selected disabled>Select Action</option>
+                            <option value="Forwarded">Forwarded</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="move-form-group">
+                        <label>Forward To</label>
+                        <select name="forward_to" class="move-select">
+                            <option value="" selected>Select User</option>
+                            {% for u in users %}
+                            <option value="{{ u.username }}">{{ u.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="move-form-group">
+                        <label>Remark</label>
+                        <textarea name="remark" class="move-textarea"
+                            placeholder="Add a remark for this movement"></textarea>
+                    </div>
+
+                    <button type="submit" class="move-btn">
+                        <i class="bi bi-send-fill"></i> Move
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

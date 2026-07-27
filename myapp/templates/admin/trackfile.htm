@@ -1,0 +1,314 @@
+{% extends 'admin/adminlayout.htm' %}
+
+{% block admin %}
+
+<style>
+    .file-list-container {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .file-card {
+        background: #ffffff;
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .file-card-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .file-card-header h3 {
+        margin: 0;
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    /* Table ko scrollable banane ke liye */
+    .file-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        padding: 20px;
+    }
+
+    .file-table {
+        width: 100%;
+        min-width: 1500px;
+        border-collapse: collapse;
+    }
+
+    .file-table th,
+    .file-table td {
+        border: 1px solid #dee2e6;
+        padding: 12px 10px;
+        vertical-align: middle;
+        font-size: 14px;
+    }
+
+    .file-table th {
+        background: #f8f9fa;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .file-table tbody tr:hover {
+        background: #f8faff;
+    }
+
+    .description-column,
+    .remarks-column {
+        min-width: 200px;
+        max-width: 250px;
+        word-break: break-word;
+    }
+
+    .date-column {
+        min-width: 170px;
+        white-space: nowrap;
+    }
+
+    .action-column {
+        min-width: 200px;
+        white-space: nowrap;
+    }
+
+    .attachment-column {
+        min-width: 120px;
+        white-space: nowrap;
+    }
+
+    .department-column {
+        min-width: 150px;
+    }
+
+    .user-column {
+        min-width: 130px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+    }
+</style>
+
+
+<div class="file-list-container">
+
+    <div class="file-card">
+
+        <!-- HEADER -->
+
+        <div class="file-card-header">
+
+            <h3>
+                <i class="bi bi-folder-fill"></i>
+                File List
+            </h3>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="file-table-wrapper">
+
+            <table class="file-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>File No</th>
+
+                        <th>Subject</th>
+
+                        <th>Priority</th>
+
+                        <th>Created By</th>
+
+                        <th>Department</th>
+
+                        <th>Current User</th>
+
+                        <th>Attachment</th>
+
+                        <th>Description</th>
+
+                        <th>Remarks</th>
+
+                        <th>Created At</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for data in filedata %}
+
+                    <tr>
+
+                        <!-- ID -->
+
+                        <td>
+                            {{ data.id }}
+                        </td>
+
+
+                        <!-- FILE NUMBER -->
+
+                        <td>
+                            {{ data.file_no }}
+                        </td>
+
+
+                        <!-- SUBJECT -->
+
+                        <td>
+                            {{ data.subject }}
+                        </td>
+
+
+                        <!-- PRIORITY -->
+
+                        <td>
+                            {{ data.priority }}
+                        </td>
+
+
+                        <!-- CREATED BY -->
+
+                        <td>
+                            {{ data.create_user }}
+                        </td>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <td class="department-column">
+                            {{ data.departments }}
+                        </td>
+
+
+                        <!-- CURRENT USER -->
+
+                        <td class="user-column">
+                            {{ data.current_user }}
+                        </td>
+
+
+                        <!-- ATTACHMENT -->
+
+                        <td class="attachment-column">
+
+                            {% if data.file %}
+
+                            <a href="{{ data.file.url }}" target="_blank" class="btn btn-primary btn-sm">
+
+                                <i class="bi bi-eye-fill"></i>
+
+                                View File
+
+                            </a>
+
+                            {% else %}
+
+                            <span class="text-muted">
+                                No File
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <td class="description-column">
+
+                            {{ data.description }}
+
+                        </td>
+
+
+                        <!-- REMARKS -->
+
+                        <td class="remarks-column">
+
+                            {{ data.remarks }}
+
+                        </td>
+
+
+                        <!-- CREATED DATE -->
+
+                        <td class="date-column">
+
+                            {{ data.created_at|date:"d M Y, h:i A" }}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td class="action-column">
+
+                            <div class="action-buttons">
+
+                                <a href="{% url 'admin_details_file' data.id %}" class="btn btn-info btn-sm">
+
+                                    <i class="bi bi-eye-fill"></i>
+                                    Details
+
+                                </a>
+
+
+                                <a href="{% url 'deletefile' data.id %}" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this file?');">
+
+                                    <i class="bi bi-trash-fill"></i>
+                                    Delete
+
+                                </a>
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    {% empty %}
+
+
+                    <tr>
+
+                        <td colspan="12" class="text-center">
+
+                            No Files Found
+
+                        </td>
+
+                    </tr>
+
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

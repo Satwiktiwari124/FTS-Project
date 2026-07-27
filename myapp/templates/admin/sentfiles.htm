@@ -1,0 +1,348 @@
+{% extends 'admin/adminlayout.htm' %}
+
+{% block admin %}
+
+<style>
+    .sent-page {
+        width: 100%;
+        color: #14275d;
+    }
+
+    .sent-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 22px;
+    }
+
+    .sent-title {
+        font-size: 34px;
+        font-weight: 800;
+        color: #14275d;
+        margin: 0 0 6px;
+    }
+
+    .sent-subtitle {
+        color: #7581a0;
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .create-file-btn {
+        background-color: #1f3fc9;
+        color: #ffffff;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .create-file-btn:hover {
+        background-color: #172fa0;
+        color: #ffffff;
+    }
+
+    .sent-card {
+        width: 100%;
+        background-color: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(20, 39, 93, 0.06);
+    }
+
+    .sent-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .sent-table {
+        width: 100%;
+        min-width: 1100px;
+        border-collapse: collapse;
+    }
+
+    .sent-table thead th {
+        background-color: #e8edfd;
+        color: #2a4be0;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        padding: 20px 24px;
+        white-space: nowrap;
+    }
+
+    .sent-table tbody td {
+        padding: 20px 24px;
+        border-bottom: 1px solid #edf0f8;
+        font-size: 15px;
+        color: #1c2a52;
+        vertical-align: top;
+    }
+
+    .sent-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .sent-table tbody tr:hover {
+        background-color: #fafbff;
+    }
+
+    .file-no-cell {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .subject-cell strong {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .subject-meta {
+        color: #8892ab;
+        font-size: 13px;
+    }
+
+    .open-btn {
+        display: inline-block;
+        background-color: #eaf0ff;
+        color: #2a4be0;
+        padding: 8px 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .open-btn:hover {
+        background-color: #dbe6ff;
+        color: #2a4be0;
+    }
+
+    .no-file-text {
+        color: #a3aabf;
+        font-size: 14px;
+    }
+
+    .status-pill {
+        display: inline-block;
+        padding: 7px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .status-forwarded {
+        background-color: #e8edfd;
+        color: #2a4be0;
+    }
+
+    .status-pending {
+        background-color: #fff3cd;
+        color: #8a6d00;
+    }
+
+    .status-completed,
+    .status-closed {
+        background-color: #eceef3;
+        color: #565f74;
+    }
+
+    .date-cell {
+        white-space: nowrap;
+        color: #4a5372;
+    }
+
+    .action-cell {
+        white-space: nowrap;
+    }
+
+    .action-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 110px;
+    }
+
+    .action-row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        border: none;
+        padding: 8px 16px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-open {
+        background-color: #2a4be0;
+        color: #ffffff;
+    }
+
+    .btn-open:hover {
+        background-color: #1f3aad;
+        color: #ffffff;
+    }
+
+    .btn-view-only {
+        background-color: #6b7280;
+        color: #ffffff;
+    }
+
+    .btn-edit {
+        background-color: #eaf0ff;
+        color: #2a4be0;
+    }
+
+    .btn-edit:hover {
+        background-color: #dbe6ff;
+        color: #2a4be0;
+    }
+
+    .btn-delete {
+        background-color: #fdecec;
+        color: #d64545;
+    }
+
+    .btn-delete:hover {
+        background-color: #fadada;
+        color: #d64545;
+    }
+
+    .empty-row td {
+        text-align: center;
+        padding: 40px;
+        color: #8892ab;
+    }
+</style>
+
+
+<div class="sent-page">
+
+    <div class="sent-header">
+
+        <div>
+            <h1 class="sent-title">Sent Files</h1>
+            <p class="sent-subtitle">Open file, track movement and take action</p>
+        </div>
+
+        <a href="{% url 'admin_create_file' %}" class="create-file-btn">
+            Create File
+        </a>
+
+    </div>
+
+
+    <div class="sent-card">
+
+        <div class="sent-table-wrapper">
+
+            <table class="sent-table">
+
+                <thead>
+                    <tr>
+                        <th>File No</th>
+                        <th>Subject</th>
+                        <th>Attachment</th>
+                        <th>Created By</th>
+                        <th>Current User</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for data in filedata %}
+
+                    <tr>
+
+                        <td class="file-no-cell">{{ data.file_no }}</td>
+
+                        <td class="subject-cell">
+                            <strong>{{ data.subject }}</strong>
+                            <span class="subject-meta">{{ data.priority }} | {{ data.departments }}</span>
+                        </td>
+
+                        <td>
+                            {% if data.file %}
+                            <a href="{{ data.file.url }}" target="_blank" class="open-btn">Open</a>
+                            {% else %}
+                            <span class="no-file-text">No File</span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ data.create_user }}</td>
+
+                        <td>
+                            {% if data.current_user %}
+                            {{ data.current_user }}
+                            {% else %}
+                            &ndash;
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if data.status == "Completed" or data.status == "Closed" %}
+                            <span class="status-pill status-closed">{{ data.status }}</span>
+                            {% elif data.status == "Forwarded" %}
+                            <span class="status-pill status-forwarded">{{ data.status }}</span>
+                            {% else %}
+                            <span class="status-pill status-pending">{{ data.status }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="date-cell">{{ data.created_at|date:"d M Y" }}</td>
+
+                        <td class="action-cell">
+                            <div class="action-stack">
+
+                                <a href="{% url 'admin_details_file' data.id %}" class="btn btn-info btn-sm">
+
+                                    <i class="bi bi-eye-fill"></i>
+                                    Details
+
+                                </a>
+
+                                <div class="action-row">
+                                    <a href="{% url 'deletefile' data.id %}" class="btn-action btn-delete"
+                                        onclick="return confirm('Are you sure you want to delete this file?');">Delete</a>
+                                </div>
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr class="empty-row">
+                        <td colspan="8">No Sent Files Found</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

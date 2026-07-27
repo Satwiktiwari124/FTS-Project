@@ -1,0 +1,340 @@
+{% extends 'admin/adminlayout.htm' %}
+
+{% block admin %}
+
+<style>
+    .dashboard-wrapper {
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    /* Welcome Box */
+    .welcome-box {
+        background: linear-gradient(120deg, #2858df, #17377f);
+        border-radius: 22px;
+        padding: 35px;
+        color: white;
+        margin-bottom: 30px;
+    }
+
+    .welcome-box h2 {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .welcome-box p {
+        font-size: 17px;
+        margin: 0;
+    }
+
+
+    /* Dashboard Cards */
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border: 1px solid #dfe5f2;
+        border-radius: 22px;
+        padding: 32px;
+        min-height: 190px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .card-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        background: #e8efff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .card-icon i {
+        font-size: 26px;
+        color: #2454dd;
+    }
+
+    .dashboard-card h2 {
+        font-size: 32px;
+        color: #10245a;
+        margin-bottom: 5px;
+    }
+
+    .dashboard-card p {
+        font-size: 17px;
+        color: #142858;
+        margin: 0;
+    }
+
+
+    /* Recent File Box */
+    .recent-box {
+        background: white;
+        border: 1px solid #dfe5f2;
+        border-radius: 22px;
+        padding: 30px;
+    }
+
+    .recent-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .recent-header h3 {
+        font-size: 25px;
+        font-weight: 700;
+        color: #11275e;
+        margin: 0;
+    }
+
+    .view-btn {
+        background: #2048b8;
+        color: white;
+        text-decoration: none;
+        padding: 12px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+
+    .view-btn:hover {
+        background: #16368f;
+        color: white;
+    }
+
+
+    /* Table */
+    .file-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .file-table thead {
+        background: #e5edff;
+    }
+
+    .file-table th {
+        padding: 18px;
+        text-align: left;
+        font-size: 14px;
+        color: #2454dd;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .file-table td {
+        padding: 18px;
+        border-bottom: 1px solid #e1e5ee;
+        font-size: 15px;
+    }
+
+    .action-badge {
+        background: #e7eeff;
+        color: #2454dd;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 30px;
+        color: #8892ab;
+    }
+
+
+    /* Responsive */
+    @media(max-width: 1100px) {
+        .dashboard-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media(max-width: 600px) {
+        .dashboard-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .recent-box {
+            overflow-x: auto;
+        }
+    }
+</style>
+
+
+<div class="dashboard-wrapper">
+
+
+    <!-- Welcome Section -->
+    <div class="welcome-box">
+
+        <h2>Welcome Admin, {{ request.session.adminusername|default:"GGL Head Office" }}</h2>
+
+        <p>
+            Manage complete file movement system from this dashboard.
+        </p>
+
+    </div>
+
+
+    <!-- Dashboard Cards -->
+    <div class="dashboard-cards">
+
+
+        <!-- Total Files -->
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                <i class="bi bi-folder-fill"></i>
+            </div>
+
+            <h2>{{ total_files }}</h2>
+
+            <p>Total Files</p>
+
+        </div>
+
+
+        <!-- Pending Files -->
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                <i class="bi bi-clock-fill"></i>
+            </div>
+
+            <h2>{{ pending_files }}</h2>
+
+            <p>Pending Files</p>
+
+        </div>
+
+
+        <!-- Employees -->
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <h2>{{ total_employees }}</h2>
+
+            <p>Employees</p>
+
+        </div>
+
+
+        <!-- Departments -->
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                <i class="bi bi-building-fill"></i>
+            </div>
+
+            <h2>{{ total_departments }}</h2>
+
+            <p>Departments</p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Recent File Movement -->
+    <div class="recent-box">
+
+
+        <div class="recent-header">
+
+            <h3>Recent File Movement</h3>
+
+            <a href="{% url 'ab_file_upload' %}" class="view-btn">
+                View All
+            </a>
+
+        </div>
+
+
+        <div style="overflow-x:auto;">
+
+            <table class="file-table">
+
+                <thead>
+
+                    <tr>
+                        <th>File No</th>
+                        <th>Subject</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Action</th>
+                        <th>Date</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for data in recent_files %}
+
+                    <tr>
+
+                        <td>{{ data.file_no }}</td>
+
+                        <td>{{ data.subject }}</td>
+
+                        <td>{{ data.create_user }}</td>
+
+                        <td>
+                            {% if data.current_user %}
+                            {{ data.current_user }}
+                            {% else %}
+                            &ndash;
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="action-badge">
+                                Created & Forwarded
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ data.created_at|date:"d M Y h:i A" }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            No Recent Files Found
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

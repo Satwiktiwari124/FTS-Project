@@ -1,0 +1,402 @@
+{% extends 'user/userlayout.htm' %}
+
+{% block user %}
+
+<style>
+    /* ===========================
+   PAGE HEADER
+=========================== */
+
+    .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .page-header h1 {
+        font-size: 32px;
+        font-weight: 800;
+        color: #0b3924;
+        margin-bottom: 6px;
+    }
+
+    .page-header p {
+        color: #5b6b62;
+        font-size: 15px;
+    }
+
+    .create-file-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #0b5f34;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 24px;
+        border-radius: 12px;
+        transition: 0.2s;
+    }
+
+    .create-file-btn:hover {
+        background: #084a28;
+        color: #ffffff;
+    }
+
+    /* ===========================
+   SEARCH CARD
+=========================== */
+
+    .search-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        padding: 28px;
+        margin-bottom: 25px;
+    }
+
+    .search-card h3 {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0b3924;
+        margin-bottom: 18px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 14px;
+    }
+
+    .search-input {
+        flex: 1;
+        height: 56px;
+        border: 1px solid #dfe7e2;
+        background: #fafcfb;
+        border-radius: 12px;
+        padding: 0 18px;
+        font-size: 15px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: #0b5f34;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(11, 95, 52, 0.12);
+    }
+
+    .track-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 56px;
+        padding: 0 28px;
+        background: #0b5f34;
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+
+    .track-btn:hover {
+        background: #084a28;
+    }
+
+    /* ===========================
+   RESULT CARD
+=========================== */
+
+    .result-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        padding: 28px;
+    }
+
+    .result-card h3 {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0b3924;
+        margin-bottom: 18px;
+    }
+
+    .file-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .file-table {
+        width: 100%;
+        min-width: 1000px;
+        border-collapse: collapse;
+    }
+
+    .file-table thead th {
+        background: #e7f5ec;
+        color: #078442;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        padding: 18px 20px;
+        text-align: left;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .file-table tbody td {
+        padding: 20px;
+        font-size: 15px;
+        color: #1a1a1a;
+        border-bottom: 1px solid #eef1ee;
+        vertical-align: middle;
+    }
+
+    .file-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .file-table tbody tr:hover td {
+        background: #fbfffc;
+    }
+
+    .no-file {
+        color: #9aa39b;
+    }
+
+    .empty-state {
+        text-align: center;
+        color: #1a1a1a;
+        padding: 30px 20px;
+    }
+
+    /* ===========================
+   STATUS BADGE
+=========================== */
+
+    .status-badge {
+        display: inline-block;
+        padding: 7px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .status-pending {
+        background: #fdecc8;
+        color: #a3720b;
+    }
+
+    .status-approved,
+    .status-completed {
+        background: #d9f2e1;
+        color: #0b7a3c;
+    }
+
+    .status-rejected {
+        background: #fbdcdf;
+        color: #c0293f;
+    }
+
+    .status-forwarded {
+        background: #e3ebfd;
+        color: #2554e0;
+    }
+
+    /* ===========================
+   ACTION BUTTON
+=========================== */
+
+    .btn-open {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        padding: 0 16px;
+        font-size: 14px;
+        font-weight: 700;
+        border-radius: 10px;
+        background: #0b5f34 !important;
+        color: #ffffff !important;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .btn-open:hover {
+        background: #084a28 !important;
+        color: #ffffff !important;
+    }
+
+    /* Mobile */
+
+    @media (max-width:768px) {
+
+        .page-header {
+            flex-direction: column;
+        }
+
+        .create-file-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .search-form {
+            flex-direction: column;
+        }
+
+        .track-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .file-table thead th,
+        .file-table tbody td {
+            padding: 14px 15px;
+        }
+
+    }
+</style>
+
+
+<!-- HEADER -->
+
+<div class="page-header">
+
+    <div>
+        <h1>File Track</h1>
+        <p>File number, subject, sender or receiver name se file track karein.</p>
+    </div>
+
+    <a href="{% url 'user_create_file' %}" class="create-file-btn">
+        Create File
+    </a>
+
+</div>
+
+
+<!-- SEARCH -->
+
+<div class="search-card">
+
+    <h3>Search File</h3>
+
+    <form method="GET" action="{% url 'userfiletrack' %}" class="search-form">
+
+        <input type="text" name="query" class="search-input"
+            placeholder="Enter file no, subject, sender or receiver name" value="{{ query }}">
+
+        <button type="submit" class="track-btn">
+            <i class="bi bi-search"></i>
+            Track File
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div class="result-card">
+
+    <h3>Tracking Result</h3>
+
+    <div class="file-table-wrapper">
+
+        <table class="file-table">
+
+            <thead>
+
+                <tr>
+                    <th>File No</th>
+                    <th>Subject</th>
+                    <th>Created By</th>
+                    <th>Current User</th>
+                    <th>Status</th>
+                    <th>Attachment</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% if filedata %}
+
+                {% for data in filedata %}
+
+                <tr>
+
+                    <td>{{ data.file_no }}</td>
+
+                    <td>{{ data.subject }}</td>
+
+                    <td>{{ data.create_user }}</td>
+
+                    <td>{{ data.current_user }}</td>
+
+                    <td>
+
+                        {% if data.status == 'Pending' %}
+                        <span class="status-badge status-pending">Pending</span>
+                        {% elif data.status == 'Approved' or data.status == 'Completed' %}
+                        <span class="status-badge status-approved">{{ data.status }}</span>
+                        {% elif data.status == 'Rejected' %}
+                        <span class="status-badge status-rejected">Rejected</span>
+                        {% elif data.status == 'Forwarded' %}
+                        <span class="status-badge status-forwarded">Forwarded</span>
+                        {% else %}
+                        <span class="status-badge status-pending">{{ data.status }}</span>
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {% if data.file %}
+                        <a href="{{ data.file.url }}" target="_blank">View File</a>
+                        {% else %}
+                        <span class="no-file">No file</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <a href="{% url 'details_file' data.id %}" class="btn-open">
+                            Open
+                        </a>
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="7" class="empty-state">No File Found</td>
+                </tr>
+
+                {% endfor %}
+
+                {% else %}
+
+                <tr>
+                    <td colspan="7" class="empty-state">Search karke file track karein</td>
+                </tr>
+
+                {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

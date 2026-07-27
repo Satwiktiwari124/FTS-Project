@@ -1,0 +1,310 @@
+{% extends 'user/userlayout.htm' %}
+
+{% block user %}
+
+<style>
+    /* ===========================
+   WELCOME BANNER
+=========================== */
+
+    .welcome-banner {
+        background: linear-gradient(135deg, #05632f, #063d1f);
+        color: #ffffff;
+        border-radius: 22px;
+        padding: 35px 38px;
+        margin-bottom: 27px;
+    }
+
+    .welcome-banner h1 {
+        font-size: 34px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .welcome-banner p {
+        font-size: 16px;
+        opacity: 0.9;
+    }
+
+    /* ===========================
+   STAT CARDS
+=========================== */
+
+    .stat-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+        margin-bottom: 27px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        padding: 26px;
+    }
+
+    .stat-icon {
+        width: 55px;
+        height: 55px;
+        background: #e6f5ec;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .stat-icon i {
+        color: #078442;
+        font-size: 24px;
+    }
+
+    .stat-card h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #0b3924;
+        margin-bottom: 6px;
+    }
+
+    .stat-card p {
+        color: #5b6b62;
+        font-size: 15px;
+    }
+
+    /* ===========================
+   RECENT MOVEMENT
+=========================== */
+
+    .movement-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        padding: 28px;
+    }
+
+    .movement-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .movement-header h2 {
+        font-size: 22px;
+        font-weight: 800;
+        color: #0b3924;
+    }
+
+    .view-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #05632f;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 22px;
+        border-radius: 12px;
+        transition: 0.2s;
+    }
+
+    .view-btn:hover {
+        background: #044d25;
+        color: #ffffff;
+    }
+
+    .movement-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .movement-table {
+        width: 100%;
+        min-width: 800px;
+        border-collapse: collapse;
+    }
+
+    .movement-table thead th {
+        background: #e7f5ec;
+        color: #078442;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        padding: 18px 20px;
+        text-align: left;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .movement-table tbody td {
+        padding: 20px;
+        font-size: 15px;
+        color: #1a1a1a;
+        border-bottom: 1px solid #eef1ee;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .movement-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .movement-table tbody tr:hover td {
+        background: #fbfffc;
+    }
+
+    .action-badge {
+        display: inline-block;
+        padding: 7px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        background: #e3ebfd;
+        color: #2554e0;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width: 1000px) {
+
+        .stat-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+    }
+
+    @media(max-width: 700px) {
+
+        .stat-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .welcome-banner h1 {
+            font-size: 26px;
+        }
+
+        .movement-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .view-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+    }
+</style>
+
+
+<!-- WELCOME BANNER -->
+
+<div class="welcome-banner">
+    <h1>Welcome User, {{ username }}</h1>
+    <p>Upload files, update your file details, move files and track status.</p>
+</div>
+
+
+<!-- STAT CARDS -->
+
+<div class="stat-cards">
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="bi bi-folder-fill"></i>
+        </div>
+        <h2>{{ my_files_count }}</h2>
+        <p>My Files</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="bi bi-inbox-fill"></i>
+        </div>
+        <h2>{{ received_count }}</h2>
+        <p>Received Files</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="bi bi-send-fill"></i>
+        </div>
+        <h2>{{ sent_count }}</h2>
+        <p>Sent Files</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="bi bi-clock-fill"></i>
+        </div>
+        <h2>{{ pending_count }}</h2>
+        <p>Pending Files</p>
+    </div>
+
+</div>
+
+
+<!-- RECENT MOVEMENT -->
+
+<div class="movement-card">
+
+    <div class="movement-header">
+        <h2>My Recent Movement</h2>
+
+        <a href="{% url 'usershowfile' %}" class="view-btn">
+            View My Files
+        </a>
+    </div>
+
+    <div class="movement-table-wrapper">
+
+        <table class="movement-table">
+
+            <thead>
+                <tr>
+                    <th>File No</th>
+                    <th>Subject</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Action</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for data in recent_movement %}
+
+                <tr>
+                    <td>{{ data.file_no }}</td>
+                    <td>{{ data.subject }}</td>
+                    <td>{{ data.from_user }}</td>
+                    <td>{{ data.to_user }}</td>
+                    <td>
+                        <span class="action-badge">{{ data.action }}</span>
+                    </td>
+                    <td>{{ data.created_at|date:"d M Y h:i A" }}</td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="6" class="text-center">No Recent Activity</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

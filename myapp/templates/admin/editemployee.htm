@@ -1,0 +1,295 @@
+{% extends 'admin/adminlayout.htm' %}
+
+{% block admin %}
+
+<style>
+    .emp-page {
+        width: 100%;
+        color: #14275d;
+    }
+
+    .emp-title {
+        font-size: 34px;
+        font-weight: 700;
+        color: #14275d;
+        margin: 0 0 5px;
+    }
+
+    .emp-subtitle {
+        color: #66708c;
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+
+    .emp-card {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #d7e2ff;
+        border-radius: 20px;
+        padding: 28px;
+    }
+
+    .emp-card-title {
+        color: #14275d;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 22px;
+    }
+
+    .emp-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .emp-grp {
+        width: 100%;
+    }
+
+    .emp-grp label {
+        display: block;
+        color: #14275d;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .emp-inp,
+    .emp-sel,
+    .emp-txt,
+    .emp-file {
+        width: 100%;
+        border: 1px solid #cbd9ff;
+        background: #f8faff;
+        border-radius: 12px;
+        outline: none;
+        color: #222;
+        font-family: Rubik, sans-serif;
+        font-size: 15px;
+        transition: 0.3s ease;
+    }
+
+    .emp-inp,
+    .emp-sel {
+        height: 50px;
+        padding: 0 14px;
+    }
+
+    .emp-file {
+        height: 50px;
+        overflow: hidden;
+        font-size: 14px;
+    }
+
+    .emp-file::file-selector-button {
+        height: 48px;
+        border: none;
+        border-right: 1px solid #d6def3;
+        background: #fff;
+        padding: 0 12px;
+        margin-right: 10px;
+        cursor: pointer;
+        font-family: Rubik, sans-serif;
+    }
+
+    .emp-txt {
+        min-height: 100px;
+        padding: 12px;
+        resize: vertical;
+    }
+
+    .emp-inp:focus,
+    .emp-sel:focus,
+    .emp-txt:focus,
+    .emp-file:focus {
+        border-color: #2455d6;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(36, 85, 214, 0.08);
+    }
+
+    .emp-full {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .emp-btns {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 5px;
+    }
+
+    .emp-save {
+        border: none;
+        background: #1f4bc5;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: Rubik, sans-serif;
+    }
+
+    .emp-save:hover {
+        background: #173da8;
+    }
+
+    .emp-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #e9efff;
+        color: #2455d6;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .emp-back:hover {
+        background: #dce6ff;
+        color: #1d49c5;
+    }
+
+    .photo-preview {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #2455d6;
+        margin-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+        .emp-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="emp-page">
+
+    <h1 class="emp-title">Edit Employee</h1>
+    <p class="emp-subtitle">Update employee details below</p>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="emp-card">
+
+        <h2 class="emp-card-title">Employee Information</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="emp-row">
+                <div class="emp-grp">
+                    <label>Full Name</label>
+                    <input type="text" name="name" class="emp-inp" value="{{ employee.name }}" required>
+                </div>
+                <div class="emp-grp">
+                    <label>Username</label>
+                    <input type="text" name="username" class="emp-inp" value="{{ employee.username }}" required>
+                </div>
+            </div>
+
+            <div class="emp-row">
+                <div class="emp-grp">
+                    <label>Email</label>
+                    <input type="email" name="email" class="emp-inp" value="{{ employee.email }}" required>
+                </div>
+                <div class="emp-grp">
+                    <label>Mobile</label>
+                    <input type="text" name="mobile" class="emp-inp" value="{{ employee.mobile }}" required>
+                </div>
+            </div>
+
+            <div class="emp-row">
+                <div class="emp-grp">
+                    <label>Employee ID</label>
+                    <input type="text" name="empid" class="emp-inp" value="{{ employee.empid }}" required>
+                </div>
+                <div class="emp-grp">
+                    <label>Department</label>
+                    <select name="department" class="emp-sel" required>
+                        <option value="">Select Department</option>
+                        {% for dep in department %}
+                        <option value="{{ dep.department_name }}" {% if employee.department==dep.department_name
+                            %}selected{% endif %}>
+                            {{ dep.department_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="emp-row">
+                <div class="emp-grp">
+                    <label>Designation</label>
+                    <input type="text" name="designation" class="emp-inp" value="{{ employee.designation }}" required>
+                </div>
+                <div class="emp-grp">
+                    <label>Role</label>
+                    <select name="role" class="emp-sel">
+                        <option value="User" {% if employee.role=='User' %}selected{% endif %}>User</option>
+                        <option value="Admin" {% if employee.role=='Admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="emp-row">
+                <div class="emp-grp">
+                    <label>Status</label>
+                    <select name="status" class="emp-sel">
+                        <option value="Active" {% if employee.status=='Active' %}selected{% endif %}>Active</option>
+                        <option value="Inactive" {% if employee.status=='Inactive' %}selected{% endif %}>Inactive
+                        </option>
+                    </select>
+                </div>
+                <div class="emp-grp">
+                    <label>Password</label>
+                    <input type="password" name="password" class="emp-inp"
+                        placeholder="Leave blank to keep current password">
+                </div>
+            </div>
+
+            <div class="emp-row">
+                <div class="emp-grp">
+                    <label>Photo</label>
+                    <input type="file" name="photo" class="emp-file" accept="image/*">
+                    {% if employee.photo %}
+                    <div style="margin-top:10px;">
+                        <img src="{{ employee.photo.url }}" class="photo-preview">
+                        <small style="display:block;color:#66708c;margin-top:3px;">Current Photo</small>
+                    </div>
+                    {% endif %}
+                </div>
+                <div></div>
+            </div>
+
+            <div class="emp-grp emp-full">
+                <label>Address</label>
+                <textarea name="address" class="emp-txt" required>{{ employee.address }}</textarea>
+            </div>
+
+            <div class="emp-btns">
+                <button type="submit" class="emp-save">
+                    <i class="bi bi-floppy-fill"></i> Update Employee
+                </button>
+                <a href="{% url 'employeelist' %}" class="emp-back">Back to List</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

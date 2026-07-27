@@ -1,0 +1,348 @@
+{% extends 'user/userlayout.htm' %}
+
+{% block user %}
+<style>
+    /* ===========================
+   CREATE FILE PAGE
+=========================== */
+
+    .create-file-page {
+        width: 100%;
+        padding: 0;
+        color: #14275d;
+    }
+
+    .create-file-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: #14275d;
+    }
+
+    .create-file-subtitle {
+        font-size: 13px;
+        color: #66708c;
+        margin-bottom: 20px;
+    }
+
+    .file-card {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #d7e2ff;
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
+    }
+
+    .file-card-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #14275d;
+        margin-bottom: 20px;
+    }
+
+    .file-form-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .file-form-group {
+        width: 100%;
+    }
+
+    .file-form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #14275d;
+    }
+
+    .file-input,
+    .file-select,
+    .file-textarea {
+        width: 100%;
+        border: 1px solid #cbd9ff;
+        background: #f8faff;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+        transition: .3s;
+    }
+
+    .file-input,
+    .file-select {
+        height: 46px;
+        padding: 0 12px;
+    }
+
+    .file-textarea {
+        padding: 12px;
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .file-input:focus,
+    .file-select:focus,
+    .file-textarea:focus {
+        background: #fff;
+        border-color: #2455d6;
+        box-shadow: 0 0 0 3px rgba(36, 85, 214, .12);
+    }
+
+    .file-upload {
+        width: 100%;
+        height: 46px;
+        border: 1px solid #cbd9ff;
+        background: #f8faff;
+        border-radius: 10px;
+        padding: 8px;
+    }
+
+    .file-upload::file-selector-button {
+        border: none;
+        background: #2455d6;
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-right: 12px;
+    }
+
+    .file-upload::file-selector-button:hover {
+        background: #183fae;
+    }
+
+    .full-width {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .form-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .save-file-btn {
+        border: none;
+        background: #05632f;
+        color: #fff;
+        padding: 11px 22px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+    .save-file-btn:hover {
+        background: #044d25;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        background: #e6f7ef;
+        color: #05632f;
+        padding: 11px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: .3s;
+    }
+
+    .back-btn:hover {
+        background: #d4f0e2;
+        color: #044d25;
+    }
+
+    .file-input:focus,
+    .file-select:focus,
+    .file-textarea:focus {
+        background: #fff;
+        border-color: #05632f;
+        box-shadow: 0 0 0 3px rgba(5, 99, 47, 0.12);
+    }
+
+    .file-upload::file-selector-button {
+        border: none;
+        background: #05632f;
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-right: 12px;
+    }
+
+    .file-upload::file-selector-button:hover {
+        background: #044d25;
+    }
+</style>
+<div class="create-file-page">
+
+    <h1 class="create-file-title">Create File</h1>
+
+    <p class="create-file-subtitle">
+        Upload / Update file and assign it to another employee
+    </p>
+
+    <div class="file-card">
+
+        <h2 class="file-card-title">
+            File Information
+        </h2>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'user_create_file' %}" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <!-- Row 1 -->
+
+            <div class="file-form-row">
+
+                <div class="file-form-group">
+                    <label>File No</label>
+                    <input type="text" name="file_no" class="file-input" placeholder="Auto Generate">
+                </div>
+
+                <div class="file-form-group">
+                    <label>Subject</label>
+                    <input type="text" name="subject" class="file-input">
+                </div>
+
+            </div>
+
+            <!-- Row 2 -->
+
+            <div class="file-form-row">
+
+                <div class="file-form-group">
+                    <label>Priority</label>
+
+                    <select name="priority" class="file-select">
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Low">Low</option>
+                    </select>
+
+                </div>
+
+                <div class="file-form-group">
+
+                    <label>Department</label>
+
+                    <select name="department" class="file-select">
+
+                        <option selected disabled>
+                            Select Department
+                        </option>
+
+                        <option value="IT Department">
+                            IT Department
+                        </option>
+
+                        <option value="Administration">
+                            Administration
+                        </option>
+
+                        <option value="Account Department">
+                            Account Department
+                        </option>
+
+                        <option value="HR Department">
+                            HR Department
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <!-- Row 3 -->
+
+            <div class="file-form-row">
+
+                <div class="file-form-group">
+
+                    <label>Assign To</label>
+
+                    <select name="employee" class="file-select">
+
+                        <option selected disabled>
+                            Select Employee
+                        </option>
+
+                        {% for u in users %}
+                        <option value="{{ u.username }}">{{ u.username }}</option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="file-form-group">
+
+                    <label>Attachment</label>
+
+                    <input type="file" name="attachment" class="file-upload">
+
+                </div>
+
+            </div>
+
+            <!-- Description -->
+
+            <div class="file-form-group full-width">
+
+                <label>Description</label>
+
+                <textarea name="description" class="file-textarea" rows="4"></textarea>
+
+            </div>
+
+            <!-- Remarks -->
+
+            <div class="file-form-group full-width">
+
+                <label>Remarks</label>
+
+                <textarea name="remarks" class="file-textarea" rows="4"></textarea>
+
+            </div>
+
+            <!-- Buttons -->
+
+            <div class="form-buttons">
+
+                <button type="submit" class="save-file-btn">
+                    <i class="bi bi-floppy-fill"></i>
+                    Save File
+                </button>
+
+                <a href="javascript:history.back()" class="back-btn">
+                    Back
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

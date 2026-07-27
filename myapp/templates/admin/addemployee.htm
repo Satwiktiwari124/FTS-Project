@@ -1,0 +1,336 @@
+{% extends 'admin/adminlayout.htm' %}
+
+{% block admin %}
+
+<style>
+    .employee-page {
+        width: 100%;
+        color: #14275d;
+    }
+
+    .employee-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #14275d;
+        margin: 0 0 5px;
+    }
+
+    .employee-subtitle {
+        color: #66708c;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .employee-card {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #d7e2ff;
+        border-radius: 20px;
+        padding: 27px 28px 28px;
+    }
+
+    .employee-card-title {
+        color: #14275d;
+        font-size: 25px;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .employee-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 27px;
+        margin-bottom: 25px;
+    }
+
+    .employee-form-group {
+        width: 100%;
+    }
+
+    .employee-form-group label {
+        display: block;
+        color: #14275d;
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 9px;
+    }
+
+    .employee-input,
+    .employee-select,
+    .employee-file,
+    .employee-textarea {
+        width: 100%;
+        border: 1px solid #cbd9ff;
+        background-color: #f8faff;
+        border-radius: 14px;
+        outline: none;
+        color: #222222;
+        font-family: "Rubik", sans-serif;
+        font-size: 17px;
+        transition: 0.3s ease;
+    }
+
+    .employee-input,
+    .employee-select {
+        height: 60px;
+        padding: 0 14px;
+    }
+
+    .employee-file {
+        height: 60px;
+        overflow: hidden;
+    }
+
+    .employee-file::file-selector-button {
+        height: 59px;
+        border: none;
+        border-right: 1px solid #d6def3;
+        background-color: #ffffff;
+        padding: 0 14px;
+        margin-right: 13px;
+        font-family: "Rubik", sans-serif;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .employee-textarea {
+        min-height: 130px;
+        padding: 14px;
+        resize: vertical;
+    }
+
+    .employee-input:focus,
+    .employee-select:focus,
+    .employee-file:focus,
+    .employee-textarea:focus {
+        border-color: #2455d6;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(36, 85, 214, 0.08);
+    }
+
+    .address-group {
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    .employee-buttons {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .save-employee-btn {
+        border: none;
+        background-color: #1f4bc5;
+        color: #ffffff;
+        padding: 12px 19px;
+        border-radius: 11px;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: "Rubik", sans-serif;
+        cursor: pointer;
+    }
+
+    .save-employee-btn:hover {
+        background-color: #173da8;
+    }
+
+    .employee-back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e9efff;
+        color: #2455d6;
+        padding: 12px 15px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .employee-back-btn:hover {
+        background-color: #dce6ff;
+        color: #1d49c5;
+    }
+
+    @media screen and (max-width: 900px) {
+        .employee-form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .employee-title {
+            font-size: 28px;
+        }
+
+
+    }
+</style>
+
+
+<div class="employee-page">
+
+    <h1 class="employee-title">Add Employee</h1>
+
+    <p class="employee-subtitle">
+        Add or update employee details. Role is static: Admin or User.
+    </p>
+
+
+    <div class="employee-card">
+
+        <h2 class="employee-card-title">
+            Employee Information
+        </h2>
+
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- FULL NAME AND USERNAME -->
+            <div class="employee-form-row">
+
+                <div class="employee-form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" class="employee-input" required>
+                </div>
+
+                <div class="employee-form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" class="employee-input" required>
+                </div>
+
+            </div>
+
+            <!-- EMAIL AND MOBILE -->
+            <div class="employee-form-row">
+
+                <div class="employee-form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" class="employee-input" required>
+                </div>
+
+                <div class="employee-form-group">
+                    <label>Mobile</label>
+                    <input type="text" name="mobile" class="employee-input" required>
+                </div>
+
+            </div>
+
+            <!-- EMPLOYEE ID AND DEPARTMENT -->
+            <div class="employee-form-row">
+
+                <div class="employee-form-group">
+                    <label>Employee ID</label>
+                    <input type="text" name="empid" class="employee-input" required>
+                </div>
+
+                <div class="employee-form-group">
+                    <label>Department</label>
+
+                    <select name="department" class="employee-select" required>
+
+                        <option value="">Select Department</option>
+
+                        {% if department %}
+                        {% for dep in department %}
+                        <option value="{{ dep.department_name }}">
+                            {{ dep.department_name }}
+                        </option>
+                        {% endfor %}
+                        {% else %}
+                        <option value="IT Department">IT Department</option>
+                        <option value="Administration">Administration</option>
+                        <option value="Account Department">Account Department</option>
+                        <option value="HR Department">HR Department</option>
+                        {% endif %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <!-- DESIGNATION AND ROLE -->
+            <div class="employee-form-row">
+
+                <div class="employee-form-group">
+                    <label>Designation</label>
+                    <input type="text" name="designation" class="employee-input" required>
+                </div>
+
+                <div class="employee-form-group">
+                    <label>Role</label>
+
+                    <select name="role" class="employee-select">
+
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <!-- STATUS AND PASSWORD -->
+            <div class="employee-form-row">
+
+                <div class="employee-form-group">
+                    <label>Status</label>
+
+                    <select name="status" class="employee-select">
+
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+
+                    </select>
+
+                </div>
+
+                <div class="employee-form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="employee-input" required>
+                </div>
+
+            </div>
+
+            <!-- PHOTO -->
+            <div class="employee-form-row">
+
+                <div class="employee-form-group">
+                    <label>Photo</label>
+                    <input type="file" name="photo" class="employee-file" accept="image/*">
+                </div>
+
+                <div></div>
+
+            </div>
+
+            <!-- ADDRESS -->
+            <div class="employee-form-group address-group">
+
+                <label>Address</label>
+                <textarea name="address" class="employee-textarea" required></textarea>
+
+            </div>
+
+            <!-- BUTTON -->
+            <div class="employee-buttons">
+
+                <button type="submit" class="save-employee-btn">
+                    <i class="bi bi-floppy-fill"></i>
+                    Save Employee
+                </button>
+
+                <a href="javascript:history.back()" class="employee-back-btn">
+                    Back
+                </a>
+
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

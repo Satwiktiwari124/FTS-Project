@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Green Gas Limited | Official Portal</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(0, 70, 45, 0.88),
+                    rgba(0, 50, 35, 0.90)),
+                url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .main {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .portal-box {
+            width: 1050px;
+            min-height: 640px;
+            display: flex;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        /* LEFT BOX */
+
+        .left-box {
+            width: 50%;
+            background: linear-gradient(to bottom, #087a40, #006331);
+            color: white;
+            padding: 120px 42px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .circle {
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            position: absolute;
+            top: -90px;
+            right: -90px;
+        }
+
+        .logo-box {
+            width: 150px;
+            height: 105px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo-box img {
+            width: 100px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .left-box h1 {
+            font-size: 37px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .description {
+            font-size: 17px;
+            line-height: 1.8;
+            max-width: 430px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-top: 18px;
+            font-size: 16px;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .feature-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        /* RIGHT BOX */
+
+        .right-box {
+            width: 50%;
+            background: white;
+            padding: 48px 42px;
+        }
+
+        .company-name {
+            display: inline-block;
+            background: #e4f3ea;
+            color: #08763f;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .right-box h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #143b2a;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #74798a;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .login-card {
+            display: block;
+            border: 1px solid #d7e2dc;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 18px;
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            border-color: #08763f;
+            box-shadow: 0px 12px 30px rgba(0, 100, 60, 0.15);
+        }
+
+        .icon-box {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .admin-icon {
+            background: #e5edff;
+            color: #315bea;
+        }
+
+        .user-icon {
+            background: #e5f5eb;
+            color: #087a40;
+        }
+
+        .login-card h3 {
+            font-size: 23px;
+            font-weight: 800;
+            color: #173d2c;
+            margin-bottom: 8px;
+        }
+
+        .login-card p {
+            margin: 0;
+            color: #777c8d;
+            font-size: 15px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 900px) {
+
+            .portal-box {
+                flex-direction: column;
+            }
+
+            .left-box,
+            .right-box {
+                width: 100%;
+            }
+
+            .left-box {
+                padding: 50px 30px;
+            }
+        }
+
+        @media(max-width: 500px) {
+
+            .main {
+                padding: 10px;
+            }
+
+            .left-box,
+            .right-box {
+                padding: 35px 25px;
+            }
+
+            .left-box h1 {
+                font-size: 28px;
+            }
+
+            .right-box h2 {
+                font-size: 29px;
+            }
+
+            .login-card {
+                display: block;
+                text-decoration: none;
+                color: inherit;
+            }
+
+            .login-card:hover {
+                text-decoration: none;
+                color: inherit;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="main">
+
+        <div class="portal-box">
+
+            <!-- LEFT SIDE -->
+
+            <div class="left-box">
+
+                <div class="circle"></div>
+
+                <div class="logo-box">
+                    <img src="https://gglengage.com/images/ggllogo.png" alt="Green Gas Limited">
+                </div>
+
+                <h1>File Tracking System</h1>
+
+                <p class="description">
+                    Secure digital platform for official file upload,
+                    movement, approvals, department workflow and
+                    real-time tracking.
+                </p>
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-file-shield"></i>
+                    </div>
+
+                    <span>Secure File Management</span>
+
+                </div>
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-route"></i>
+                    </div>
+
+                    <span>Track File Movement</span>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT SIDE -->
+
+            <div class="right-box">
+
+                <span class="company-name">
+                    Green Gas Limited
+                </span>
+
+                <h2>Official Portal</h2>
+
+                <p class="subtitle">
+                    Please select your login type to continue.
+                </p>
+
+
+                <!-- ADMIN LOGIN -->
+
+                <a href="{% url 'adminlogin' %}" class="login-card">
+
+                    <div class="icon-box admin-icon">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+
+                    <h3>Admin Login</h3>
+
+                    <p>
+                        Manage users, departments and all file records.
+                    </p>
+
+                </a>
+
+
+                <!-- USER LOGIN -->
+                <a href="{% url 'userlogin' %}" class="login-card">
+
+                    <div class="icon-box user-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <h3>User Login</h3>
+
+                    <p>
+                        Upload, update, move and track your files.
+                    </p>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+        </script>
+
+</body>
+
+</html>
