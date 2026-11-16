@@ -221,8 +221,7 @@
                     <select name="department" class="emp-sel" required>
                         <option value="">Select Department</option>
                         {% for dep in department %}
-                        <option value="{{ dep.department_name }}" {% if employee.department==dep.department_name
-                            %}selected{% endif %}>
+                        <option value="{{ dep.department_name }}" {% if employee.department == dep.department_name %}selected{% endif %}>
                             {{ dep.department_name }}
                         </option>
                         {% endfor %}
@@ -238,8 +237,8 @@
                 <div class="emp-grp">
                     <label>Role</label>
                     <select name="role" class="emp-sel">
-                        <option value="User" {% if employee.role=='User' %}selected{% endif %}>User</option>
-                        <option value="Admin" {% if employee.role=='Admin' %}selected{% endif %}>Admin</option>
+                        <option value="User" {% if employee.role == 'User' %}selected{% endif %}>User</option>
+                        <option value="Admin" {% if employee.role == 'Admin' %}selected{% endif %}>Admin</option>
                     </select>
                 </div>
             </div>
@@ -248,8 +247,8 @@
                 <div class="emp-grp">
                     <label>Status</label>
                     <select name="status" class="emp-sel">
-                        <option value="Active" {% if employee.status=='Active' %}selected{% endif %}>Active</option>
-                        <option value="Inactive" {% if employee.status=='Inactive' %}selected{% endif %}>Inactive
+                        <option value="Active" {% if employee.status == 'Active' %}selected{% endif %}>Active</option>
+                        <option value="Inactive" {% if employee.status == 'Inactive' %}selected{% endif %}>Inactive
                         </option>
                     </select>
                 </div>
