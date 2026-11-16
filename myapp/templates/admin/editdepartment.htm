@@ -1,3 +1,4 @@
+
 {% extends 'admin/adminlayout.htm' %}
 
 {% block admin %}
@@ -168,10 +169,8 @@
                 <div class="dept-grp">
                     <label>Status</label>
                     <select name="status" class="dept-sel">
-                        <option value="Active" {% if department.status=='Active' %}selected{% endif %}>Active
-                        </option>
-                        <option value="Inactive" {% if department.status=='Inactive' %}selected{% endif %}>
-                            Inactive</option>
+                      <option value="Active" {% if department.status == 'Active' %}selected{% endif %}>Active</option>
+                        <option value="Inactive" {% if department.status == 'Inactive' %}selected{% endif %}>Inactive</option>
                     </select>
                 </div>
 
